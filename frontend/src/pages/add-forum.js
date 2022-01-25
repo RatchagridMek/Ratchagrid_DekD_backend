@@ -12,7 +12,6 @@ const NewForum = (props) => {
         header: '',
         content: '',
     }
-
     const [data, setData] = useState(state);
     const [error_list, setError_list] = useState([]);
     const [html_error, sethtml_error] = useState('');
@@ -21,8 +20,6 @@ const NewForum = (props) => {
         document.getElementById('btn-able').classList.toggle('d-none');
         document.getElementById('btn-disable').classList.toggle('d-none');
     }
-
-
     const handleHeader = (e) => {
         let acc_btn = document.getElementById('btn-able');
         let length = data.content.replace(/<\/?[^>]+(>|$)/g, "").length;

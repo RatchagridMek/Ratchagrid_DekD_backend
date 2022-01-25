@@ -21,7 +21,17 @@ const Index = () => {
     useEffect(() => {
         const axiosGet = async () => {
             const res = await axios.get('api/forum')
-            setForum(res.data)
+            if(res.data.status === 200){
+                setForum(res.data)
+            }
+            else {
+                swal({
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'โปรดตรวจสอบ Database ว่าทำงานอยู่หรือไม่',
+                    icon: 'error',
+                })
+            }
+            
         }
         axiosGet().then(() => {
             setisUpload(true);
