@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Row, Col, Modal } from 'react-bootstrap';
+import { Form, Button, Row, Col, Modal, OverlayTrigger, Popover } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
@@ -68,7 +68,7 @@ const NewForum = (props) => {
                     }
                 }
                 break;
-            default : break;
+            default: break;
         }
     }
 
@@ -78,6 +78,18 @@ const NewForum = (props) => {
         sethtml_error('');
         setcontent_error('');
     }
+
+    const HeaderpopoverHoverFocus = (
+        <Popover id="popover-trigger-hover-focus" className="fs-6 p-2">
+            <span><strong className="text-danger"> TIPS</strong><br /><span > โปรดใส่ข้อความตั้งแต่ 4 ตัวขึ้นไป</span></span>
+        </Popover>
+    );
+
+    const ContentpopoverHoverFocus = (
+        <Popover id="popover-trigger-hover-focus" className="fs-6 p-2">
+            <span><strong className="text-danger"> TIPS</strong><br /><span > โปรดใส่ข้อความตั้งแต่ 6 ตัวขึ้นไป</span></span>
+        </Popover>
+    );
 
     const submit = (e) => {
         e.preventDefault();
@@ -105,7 +117,7 @@ const NewForum = (props) => {
                 case 401:
                     setcontent_error(res.data.message);
                     break;
-                default : break;
+                default: break;
             }
         })
     }
@@ -121,22 +133,34 @@ const NewForum = (props) => {
                     <Form>
                         <Form.Group as={Row} className="mb-3">
                             <Col sm="12">
-                                <Form.Control size="md" onChange={handleHeader} className="fw-bold" id="textHeader" placeholder='หัวข้อกระทู้' />
+                                <OverlayTrigger
+                                    trigger={['click']}
+                                    placement="right"
+                                    overlay={HeaderpopoverHoverFocus}
+                                >
+                                    <Form.Control size="md" autocomplete="off" onChange={handleHeader} className="fw-bold" id="textHeader" placeholder='หัวข้อกระทู้' />
+                                </OverlayTrigger>
                                 <span className="text-danger">{error_list.header || html_error}</span>
                             </Col>
                         </Form.Group>
-                        <Form.Group id="textContent">
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data={data.content}
-                                onChange={handleContent}
-                                config={{
-                                    removePlugins: ["EasyImage", "ImageUpload", "MediaEmbed", "Table", "TableToolbar", "BlockQuote"],
-                                    placeholder: 'เนื้อหากระทู้'
-                                }}
-                            >
-                            </CKEditor>
-                        </Form.Group>
+                        <OverlayTrigger
+                            trigger={['click']}
+                            placement="right"
+                            overlay={ContentpopoverHoverFocus}
+                        >
+                            <Form.Group id="textContent">
+                                <CKEditor
+                                    editor={ClassicEditor}
+                                    data={data.content}
+                                    onChange={handleContent}
+                                    config={{
+                                        removePlugins: ["EasyImage", "ImageUpload", "MediaEmbed", "Table", "TableToolbar", "BlockQuote"],
+                                        placeholder: 'เนื้อหากระทู้'
+                                    }}
+                                >
+                                </CKEditor>
+                            </Form.Group>
+                        </OverlayTrigger>
                         <span className="text-danger">{error_list.content || content_error}</span>
                         <Button id="btn-able" onClick={submit} className="mt-3 mb-2 d-none d-flex justify-content-center align-items-center" variant="primary">สร้างกระทู้</Button>
                         <Button id="btn-disable" className="mt-3 mb-2 d-flex justify-content-center align-items-center" variant="primary" disabled>สร้างกระทู้</Button>
